@@ -3,7 +3,10 @@ version: '3.7'
 services:
   drupal:
     container_name: practice-drupal
-    build: .
+    image: custom-drupal
+    build: 
+      context: .
+      dockerfile: Dockerfile-drupal
     ports:
       - 80:80
     networks:
@@ -48,3 +51,4 @@ networks:
       driver: default
       config:
         - subnet: 172.168.0.0/24
+
