@@ -1,23 +1,16 @@
 #!/bin/bash
 
 function stopCompose() {
-  docker-compose down
-}
-function cleanVolumesInused() {
-  docker volume prune -f
-}
-
-
-function main() {
   if [ -s "docker-compose.yml" ]; then
-    stopCompose
-    cleanVolumesInused
+    docker-compose down -v
     echo -e "Volumes cleaned"
-  else  
+  else
     echo -e "Error file \"docker-compose.yml\" not in path $(pwd)"
   fi
+}
 
-
+function main() {
+  stopCompose
 }
 
 main
