@@ -1,0 +1,54 @@
+# create your drupal and postgres config here, based off the last assignment
+version: '3.7'
+services:
+  drupal:
+    container_name: practice-drupal
+    image: custom-drupal
+    build: 
+      context: .
+      dockerfile: Dockerfile-drupal
+    ports:
+      - 80:80
+    networks:
+      drupal_net:
+         ipv4_address: 172.168.0.2
+    depends_on:
+      - postgres
+    volumes:
+      - drupal-modules:/var/www/html/modules
+      - drupal-profiles:/var/www/html/profiles
+      - drupal-themes:/var/www/html/themes
+      - drupal-sites:/var/www/html/sites
+  postgres:
+    image: postgres:10
+    container_name: practice-postgres
+    environment:
+      POSTGRES_DB: drupal
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: S3cretisiM
+    ports:
+      - 5432:5432
+    networks:
+      drupal_net:
+        ipv4_address: 172.168.0.3
+    volumes:
+      - drupal-pgdata:/var/lib/postgresql/data
+volumes:
+  drupal-modules:
+    name: drupal-modules
+  drupal-profiles:
+    name: drupal-profiles
+  drupal-themes:
+    name: drupal-themes
+  drupal-sites:
+    name: drupal-sites
+  drupal-pgdata:
+    name: drupal-pgdata
+networks:
+  drupal_net:
+    name: drupal_net
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.168.0.0/24
+
